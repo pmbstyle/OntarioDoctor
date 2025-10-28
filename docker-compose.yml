@@ -1,0 +1,130 @@
+services:
+  # Qdrant Vector Database
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: OntarioDoctor-qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - ./qdrant_data:/qdrant/storage
+    networks:
+      - OntarioDoctor-network
+    healthcheck:
+      test: ["CMD-SHELL", "timeout 5 sh -c '</dev/tcp/localhost/6333' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # vLLM Service (GPU-accelerated with Meditron-7B)
+  vllm:
+    build:
+      context: .
+      dockerfile: backend/llm/Dockerfile
+    container_name: OntarioDoctor-vllm
+    ports:
+      - "${VLLM_PORT:-8000}:8000"
+    volumes:
+      - ~/.cache/huggingface:/root/.cache/huggingface
+    environment:
+      - HF_TOKEN=${HF_TOKEN}
+      - CUDA_VISIBLE_DEVICES=0
+      - VLLM_MODEL=${VLLM_MODEL:-epfl-llm/meditron-7b}
+      - VLLM_PORT=${VLLM_PORT:-8000}
+      - VLLM_HOST=0.0.0.0
+      - VLLM_GPU_MEMORY_UTILIZATION=${VLLM_GPU_MEMORY_UTILIZATION:-0.95}
+      - VLLM_MAX_MODEL_LEN=${VLLM_MAX_MODEL_LEN:-2048}
+    networks:
+      - OntarioDoctor-network
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 180s
+    restart: on-failure
+
+  # RAG Service
+  rag:
+    build:
+      context: .
+      dockerfile: backend/rag/Dockerfile
+    container_name: OntarioDoctor-rag
+    ports:
+      - "8001:8001"
+    environment:
+      - RAG_QDRANT_URL=http://qdrant:6333
+      - RAG_LOG_LEVEL=INFO
+    depends_on:
+      - qdrant
+    networks:
+      - OntarioDoctor-network
+    restart: on-failure
+
+  # Orchestrator Service
+  orchestrator:
+    build:
+      context: .
+      dockerfile: backend/orchestrator/Dockerfile
+    container_name: OntarioDoctor-orchestrator
+    ports:
+      - "8002:8002"
+    environment:
+      - ORCHESTRATOR_RAG_URL=${ORCHESTRATOR_RAG_URL:-http://rag:8001}
+      - ORCHESTRATOR_VLLM_URL=${ORCHESTRATOR_LLM_URL:-http://vllm:8000}
+      - ORCHESTRATOR_LOG_LEVEL=${ORCHESTRATOR_LOG_LEVEL:-INFO}
+    depends_on:
+      - rag
+      - vllm
+    networks:
+      - OntarioDoctor-network
+    restart: on-failure
+
+  # API Gateway
+  gateway:
+    build:
+      context: .
+      dockerfile: backend/gateway/Dockerfile
+    container_name: OntarioDoctor-gateway
+    ports:
+      - "8080:8000"
+    environment:
+      - GATEWAY_ORCHESTRATOR_URL=http://orchestrator:8002
+      - GATEWAY_RAG_URL=http://rag:8001
+      - GATEWAY_CORS_ORIGINS=["http://localhost:5173","http://localhost:3000"]
+      - GATEWAY_LOG_LEVEL=INFO
+    depends_on:
+      - orchestrator
+    networks:
+      - OntarioDoctor-network
+    restart: on-failure
+
+  # Frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: OntarioDoctor-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:8080
+    depends_on:
+      - gateway
+    networks:
+      - OntarioDoctor-network
+
+networks:
+  OntarioDoctor-network:
+    driver: bridge
+
+volumes:
+  qdrant_data:

@@ -1,0 +1,99 @@
+<template>
+  <div class="bg-card p-4">
+    <form @submit.prevent="handleSubmit" class="flex gap-3">
+      <Textarea
+        v-model="input"
+        ref="textareaRef"
+        :disabled="disabled"
+        :placeholder="placeholder"
+        rows="1"
+        class="flex-1 resize-none"
+        @keydown="handleKeyDown"
+        @input="adjustHeight"
+      />
+      <Button
+        type="submit"
+        :disabled="disabled || !input.trim()"
+        size="lg"
+        class="h-16 px-6 cursor-pointer"
+      >
+        <span v-if="!loading">Send</span>
+        <svg
+          v-else
+          class="h-5 w-5 animate-spin"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          />
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          />
+        </svg>
+      </Button>
+    </form>
+    <p class="mt-2 text-xs text-muted-foreground">
+      Press Enter to send, Shift+Enter for new line
+    </p>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, nextTick } from 'vue'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
+
+const props = defineProps<{
+  disabled?: boolean
+  loading?: boolean
+  placeholder?: string
+}>()
+
+const emit = defineEmits<{
+  submit: [content: string]
+}>()
+
+const input = ref('')
+const textareaRef = ref<HTMLTextAreaElement | null>(null)
+
+function handleSubmit() {
+  const content = input.value.trim()
+  if (!content || props.disabled) return
+
+  emit('submit', content)
+  input.value = ''
+
+  // Reset textarea height
+  nextTick(() => {
+    if (textareaRef.value) {
+      textareaRef.value.style.height = 'auto'
+    }
+  })
+}
+
+function handleKeyDown(event: KeyboardEvent) {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault()
+    handleSubmit()
+  }
+}
+
+function adjustHeight() {
+  if (!textareaRef.value) return
+
+  // Reset height to auto to get correct scrollHeight
+  textareaRef.value.style.height = 'auto'
+
+  // Set height to scrollHeight, max 200px
+  const newHeight = Math.min(textareaRef.value.scrollHeight, 200)
+  textareaRef.value.style.height = `${newHeight}px`
+}
+</script>

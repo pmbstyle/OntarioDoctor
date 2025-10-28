@@ -1,0 +1,104 @@
+{
+  "er_rules": [
+    {
+      "symptoms": ["chest pain", "shortness of breath"],
+      "action": "ER",
+      "message": "Call 911 or go to ER immediately - possible heart attack"
+    },
+    {
+      "symptoms": ["chest pain", "dyspnea"],
+      "action": "ER",
+      "message": "Call 911 or go to ER immediately - possible heart attack"
+    },
+    {
+      "symptoms": ["stiff neck", "high fever"],
+      "action": "ER",
+      "message": "Go to ER immediately - possible meningitis"
+    },
+    {
+      "symptoms": ["neck stiffness", "fever"],
+      "action": "ER",
+      "message": "Go to ER immediately - possible meningitis"
+    },
+    {
+      "symptoms": ["unilateral weakness", "face droop"],
+      "action": "ER",
+      "message": "Call 911 immediately - possible stroke"
+    },
+    {
+      "symptoms": ["one sided weakness", "facial droop"],
+      "action": "ER",
+      "message": "Call 911 immediately - possible stroke"
+    },
+    {
+      "symptoms": ["speech difficulty", "slurred speech"],
+      "action": "ER",
+      "message": "Call 911 immediately - possible stroke"
+    },
+    {
+      "symptoms": ["severe headache", "sudden"],
+      "action": "ER",
+      "message": "Go to ER immediately - possible aneurysm or stroke"
+    },
+    {
+      "symptoms": ["worst headache ever"],
+      "action": "ER",
+      "message": "Go to ER immediately - possible aneurysm"
+    },
+    {
+      "symptoms": ["anaphylaxis"],
+      "action": "911",
+      "message": "Call 911 immediately - severe allergic reaction"
+    },
+    {
+      "symptoms": ["throat swelling", "difficulty breathing"],
+      "action": "911",
+      "message": "Call 911 immediately - possible anaphylaxis"
+    },
+    {
+      "symptoms": ["severe dehydration", "no urination", "child"],
+      "action": "ER",
+      "message": "Go to ER immediately - severe dehydration in child"
+    },
+    {
+      "symptoms": ["infant", "fever", "under 3 months"],
+      "action": "ER",
+      "message": "Go to ER immediately - fever in infant under 3 months"
+    },
+    {
+      "symptoms": ["seizure", "first time"],
+      "action": "ER",
+      "message": "Go to ER immediately - first seizure requires evaluation"
+    },
+    {
+      "symptoms": ["confusion", "altered mental status"],
+      "action": "ER",
+      "message": "Go to ER immediately - altered mental status"
+    },
+    {
+      "symptoms": ["severe abdominal pain", "sudden"],
+      "action": "ER",
+      "message": "Go to ER - severe abdominal pain requires evaluation"
+    },
+    {
+      "symptoms": ["vomiting blood", "hematemesis"],
+      "action": "ER",
+      "message": "Go to ER immediately - vomiting blood"
+    },
+    {
+      "symptoms": ["black stool", "melena"],
+      "action": "ER",
+      "message": "Go to ER - possible gastrointestinal bleeding"
+    },
+    {
+      "symptoms": ["difficulty breathing", "severe"],
+      "action": "ER",
+      "message": "Call 911 or go to ER immediately - severe breathing difficulty"
+    },
+    {
+      "symptoms": ["bluish lips", "cyanosis"],
+      "action": "911",
+      "message": "Call 911 immediately - lack of oxygen"
+    }
+  ]
+}

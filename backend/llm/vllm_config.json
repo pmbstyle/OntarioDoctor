@@ -1,0 +1,8 @@
+{
+  "model": "google/medgemma-4b-it",
+  "tensor_parallel_size": 1,
+  "gpu_memory_utilization": 0.9,
+  "max_model_len": 4096,
+  "dtype": "auto",
+  "trust_remote_code": true
+}
