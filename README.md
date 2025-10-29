@@ -1,4 +1,4 @@
-# OntarioDoctor 🇨🇦
+# OntarioDoctor
 
 A medical symptom-checker chat application for Ontario residents, powered by RAG (Retrieval-Augmented Generation) with MedGemma-4b-it LLM.
 
@@ -7,7 +7,7 @@ A medical symptom-checker chat application for Ontario residents, powered by RAG
 - **💬 Conversational Interface**: Natural language symptom checking
 - **📚 Grounded Responses**: All answers backed by medical sources with citations
 - **🚨 Red-Flag Detection**: Automatic triage for emergency situations
-- **🇨🇦 Ontario-Focused**: Localized resources (Telehealth Ontario, walk-in clinics, ER guidance)
+- **🍁 Ontario-Focused**: Localized resources (Telehealth Ontario, walk-in clinics, ER guidance)
 - **🔒 Privacy-First**: Session-based only, no data persistence or user accounts
 - **⚡ Hybrid RAG**: Vector search + BM25 with cross-encoder reranking
 - **🎨 Modern UI**: Vue 3 + TailwindCSS + shadcn-vue
