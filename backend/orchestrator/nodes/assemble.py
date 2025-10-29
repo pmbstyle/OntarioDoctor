@@ -25,14 +25,7 @@ def assemble_context(state: Dict[str, Any]) -> Dict[str, Any]:
         state["citations"] = []
         return state
 
-    # Deduplicate by doc_id (already done in retrieval, but double-check)
-    seen_doc_ids = set()
-    unique_docs = []
-    for doc in retrieved_docs:
-        doc_id = doc.get("doc_id", "")
-        if doc_id not in seen_doc_ids:
-            seen_doc_ids.add(doc_id)
-            unique_docs.append(doc)
+    unique_docs = list({doc.get("doc_id", ""): doc for doc in retrieved_docs}.values())
 
     # Diversify by source (prefer different sources)
     source_counts = {}

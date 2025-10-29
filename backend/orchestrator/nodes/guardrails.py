@@ -49,13 +49,34 @@ def check_red_flags(state: Dict[str, Any]) -> Dict[str, Any]:
     # Combine text and extracted symptoms
     all_text = user_text + " " + " ".join(symptoms_from_features)
 
+    # Tokenize for word-boundary matching
+    words = set(all_text.lower().split())
+
     # Check against rules
     matched_rules = []
     for rule in ER_RULES:
         rule_symptoms = rule["symptoms"]
 
-        # Check if ALL symptoms in rule are present
-        all_present = all(symptom.lower() in all_text for symptom in rule_symptoms)
+        # Check if ALL symptoms in rule are present (word boundary matching)
+        all_present = True
+        for symptom in rule_symptoms:
+            symptom_lower = symptom.lower()
+            # Check if symptom exists as full word or in common multi-word phrases
+            symptom_found = False
+
+            # Single word check
+            if symptom_lower in words:
+                symptom_found = True
+            # Multi-word phrase check (e.g., "chest pain")
+            elif " " in symptom_lower and symptom_lower in all_text:
+                symptom_found = True
+            # Partial word check for compound symptoms (e.g., "unconscious" in "unconsciousness")
+            elif any(symptom_lower in word for word in words):
+                symptom_found = True
+
+            if not symptom_found:
+                all_present = False
+                break
 
         if all_present:
             matched_rules.append(rule)

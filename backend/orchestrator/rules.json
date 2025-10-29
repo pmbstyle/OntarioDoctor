@@ -6,7 +6,22 @@
       "message": "Call 911 or go to ER immediately - possible heart attack"
     },
     {
+      "symptoms": ["chest pain", "trouble breathing"],
+      "action": "ER",
+      "message": "Call 911 or go to ER immediately - possible heart attack"
+    },
+    {
+      "symptoms": ["chest pain", "difficulty breathing"],
+      "action": "ER",
+      "message": "Call 911 or go to ER immediately - possible heart attack"
+    },
+    {
       "symptoms": ["chest pain", "dyspnea"],
+      "action": "ER",
+      "message": "Call 911 or go to ER immediately - possible heart attack"
+    },
+    {
+      "symptoms": ["chest pain", "breathe"],
       "action": "ER",
       "message": "Call 911 or go to ER immediately - possible heart attack"
     },
@@ -94,6 +109,21 @@
       "symptoms": ["difficulty breathing", "severe"],
       "action": "ER",
       "message": "Call 911 or go to ER immediately - severe breathing difficulty"
+    },
+    {
+      "symptoms": ["trouble breathing", "severe"],
+      "action": "ER",
+      "message": "Call 911 or go to ER immediately - severe breathing difficulty"
+    },
+    {
+      "symptoms": ["can't breathe"],
+      "action": "911",
+      "message": "Call 911 immediately - inability to breathe"
+    },
+    {
+      "symptoms": ["cannot breathe"],
+      "action": "911",
+      "message": "Call 911 immediately - inability to breathe"
     },
     {
       "symptoms": ["bluish lips", "cyanosis"],

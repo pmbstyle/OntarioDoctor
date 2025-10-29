@@ -3,7 +3,7 @@ import httpx
 from typing import Dict, Any
 
 from backend.orchestrator.prompts import SYSTEM_PROMPT, build_user_prompt, build_er_response
-from backend.shared.constants import LLM_TEMPERATURE, LLM_MAX_TOKENS
+from backend.shared.constants import LLM_TEMPERATURE, LLM_MAX_TOKENS, LLM_MODEL
 
 
 logger = logging.getLogger(__name__)
@@ -69,7 +69,7 @@ async def generate_answer(state: Dict[str, Any], ollama_url: str = "http://local
             response = await client.post(
                 f"{ollama_url}/api/chat",
                 json={
-                    "model": "amsaravi/medgemma-4b-it:q6",
+                    "model": LLM_MODEL,
                     "messages": [
                         {"role": "system", "content": SYSTEM_PROMPT},
                         {"role": "user", "content": user_prompt}
