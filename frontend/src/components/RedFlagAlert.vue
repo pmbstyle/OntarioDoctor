@@ -22,7 +22,7 @@
           </svg>
         </div>
         <div class="flex-1">
-          <h3 class="text-lg font-semibold text-destructive">⚠️ Urgent: Immediate Medical Attention Required</h3>
+          <h3 class="text-lg font-semibold text-destructive">Urgent: Immediate Medical Attention Required</h3>
           <div class="mt-2 space-y-2">
             <p v-for="(flag, index) in redFlags" :key="index" class="text-sm text-destructive/80">
               {{ flag }}

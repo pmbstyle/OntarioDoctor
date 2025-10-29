@@ -1,8 +1,8 @@
 <template>
-  <Card v-if="citations.length > 0" class="mt-3">
-    <CardContent class="pt-4">
+  <Card v-if="citations.length > 0" class="mt-3 border-none p-0 shadow-none">
+    <CardContent>
       <h4 class="mb-3 text-sm font-semibold text-foreground">Sources:</h4>
-      <div class="space-y-2">
+      <div class="flex gap-2">
         <a
           v-for="citation in citations"
           :key="citation.id"
@@ -14,7 +14,6 @@
           <span class="font-mono text-xs font-semibold text-primary">[{{ citation.id }}]</span>
           <div class="flex-1">
             <p class="font-medium text-foreground">{{ citation.title }}</p>
-            <p class="text-xs text-muted-foreground">{{ citation.source }}</p>
           </div>
           <svg
             class="h-4 w-4 shrink-0 text-muted-foreground"

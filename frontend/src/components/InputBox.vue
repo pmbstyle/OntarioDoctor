@@ -7,7 +7,7 @@
         :disabled="disabled"
         :placeholder="placeholder"
         rows="1"
-        class="flex-1 resize-none"
+        class="flex-1 h-16 resize-none"
         @keydown="handleKeyDown"
       />
       <Button

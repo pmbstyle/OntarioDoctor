@@ -54,7 +54,7 @@
             </ul>
           </CardContent>
         </Card>
-        <p class="mt-4 text-xs text-muted-foreground">
+        <p class="mt-4 text-xs text-muted-foreground italic pt-4">
           This is not medical advice. For emergencies, call 911.
         </p>
       </CardContent>
@@ -70,7 +70,7 @@
 
         <!-- Messages -->
         <div v-for="(message, index) in chatStore.messages" :key="index" class="space-y-4">
-          <MessageBubble :message="message" :show-timestamp="false" />
+          <MessageBubble :message="message" :show-timestamp="true" />
 
           <!-- Citations (show after assistant messages) -->
           <CitationCard
@@ -82,7 +82,7 @@
         <!-- Loading Indicator -->
         <div v-if="chatStore.loading" class="flex justify-start">
           <Card class="bg-muted/50">
-            <CardContent class="pt-4">
+            <CardContent>
               <div class="flex items-center gap-2">
                 <div class="flex gap-1">
                   <Skeleton class="h-2 w-2 rounded-full" />

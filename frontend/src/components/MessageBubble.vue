@@ -2,15 +2,15 @@
   <div
     :class="[
       'flex',
-      message.role === 'user' ? 'justify-end' : 'justify-start',
+      message.role === 'user' ? 'justify-end items-end' : 'justify-end items-end flex-row-reverse',
     ]"
   >
     <Card
       :class="[
         'max-w-[80%] py-0',
         message.role === 'user'
-          ? 'bg-primary text-primary-foreground'
-          : 'bg-muted/50',
+          ? 'bg-primary text-primary-foreground mr-4'
+          : 'bg-muted/50 ml-4',
       ]"
     >
       <CardContent class="p-4">
@@ -29,6 +29,12 @@
         </div>
       </CardContent>
     </Card>
+    <Avatar>
+      <AvatarImage v-if="message.role === 'user'" :src="userAvatar" />
+      <AvatarImage v-else :src="doctorAvatar" />
+      <AvatarFallback v-if="message.role === 'user'">U</AvatarFallback>
+      <AvatarFallback v-else>A</AvatarFallback>
+    </Avatar>
   </div>
 </template>
 
@@ -36,6 +42,9 @@
 import { computed } from 'vue'
 import type { Message } from '@/types/chat'
 import { Card, CardContent } from '@/components/ui/card'
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
+import doctorAvatar from '@/assets/doctor.png'
+import userAvatar from '@/assets/user.png'
 
 const props = defineProps<{
   message: Message

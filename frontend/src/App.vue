@@ -10,15 +10,11 @@ import ChatView from './views/ChatView.vue'
 #app {
   height: 100vh;
   width: 100%;
+  padding: 25px 0;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding:0;
-  background-image: url('./assets/background.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
 }
 </style>
