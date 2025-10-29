@@ -6,6 +6,7 @@ A PoC of a medical symptom-checker chat application for Ontario residents, power
 <img src="https://github.com/user-attachments/assets/cf137d01-f53e-4090-8e2b-60763c62f075" />
 </p>
 
+Showcase:
 https://www.loom.com/share/8458c35ef3dd4c009d4a55428a1f3c98
 
 ## 🎯 Features
