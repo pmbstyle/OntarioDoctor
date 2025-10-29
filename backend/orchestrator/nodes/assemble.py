@@ -1,5 +1,3 @@
-"""Assemble node - Build context with citations"""
-
 import logging
 from typing import Dict, Any, List
 

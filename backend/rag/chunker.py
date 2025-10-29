@@ -1,5 +1,3 @@
-"""Text chunking logic"""
-
 import logging
 from typing import List
 from backend.shared.models import Document, Chunk

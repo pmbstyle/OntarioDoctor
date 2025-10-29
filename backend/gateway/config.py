@@ -1,11 +1,7 @@
-"""Gateway service configuration"""
-
 from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    """Gateway service settings"""
-
     # Service
     host: str = "0.0.0.0"
     port: int = 8000

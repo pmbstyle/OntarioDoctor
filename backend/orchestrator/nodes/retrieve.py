@@ -1,5 +1,3 @@
-"""Retrieve node - Call RAG service"""
-
 import logging
 import httpx
 from typing import Dict, Any

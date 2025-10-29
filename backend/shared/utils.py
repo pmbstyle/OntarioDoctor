@@ -1,5 +1,3 @@
-"""Shared utility functions"""
-
 import time
 import logging
 from typing import Any, Callable

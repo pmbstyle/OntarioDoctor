@@ -1,5 +1,3 @@
-"""API Gateway - Public-facing API"""
-
 import time
 import httpx
 from fastapi import FastAPI, HTTPException

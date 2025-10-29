@@ -1,5 +1,3 @@
-"""Symptom NLU node - Extract features from user message"""
-
 import re
 import logging
 from typing import Dict, Any

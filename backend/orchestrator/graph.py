@@ -1,5 +1,3 @@
-"""LangGraph state machine definition"""
-
 import logging
 import uuid
 from typing import TypedDict, Annotated, List
@@ -23,7 +21,7 @@ class GraphState(TypedDict):
     features: PatientFeatures | None
     red_flag_check: RedFlagCheck | None
     retrieved_docs: List[dict]
-    context_text: str | None
+    context_text: str | None 
     citations: List[Citation]
     answer: str | None
     triage: str

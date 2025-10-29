@@ -17,7 +17,7 @@ EMBEDDING_DIM = 384
 
 RERANKER_MODEL = "BAAI/bge-reranker-base"
 
-LLM_MODEL = "google/medgemma-4b-it"
+LLM_MODEL = "amsaravi/medgemma-4b-it:q6"
 
 # ============================================================================
 # Chunking Parameters

@@ -1,5 +1,3 @@
-"""Shared Pydantic models for all services"""
-
 from typing import List, Optional, Literal
 from pydantic import BaseModel, Field
 

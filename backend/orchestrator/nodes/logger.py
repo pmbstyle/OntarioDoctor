@@ -1,5 +1,3 @@
-"""Logger node - Log execution trace"""
-
 import logging
 import json
 from typing import Dict, Any

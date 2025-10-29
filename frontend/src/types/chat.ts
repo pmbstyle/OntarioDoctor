@@ -1,7 +1,3 @@
-/**
- * Chat types matching backend API
- */
-
 export interface Message {
   role: 'user' | 'assistant' | 'system'
   content: string

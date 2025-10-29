@@ -9,7 +9,6 @@
         rows="1"
         class="flex-1 resize-none"
         @keydown="handleKeyDown"
-        @input="adjustHeight"
       />
       <Button
         type="submit"
@@ -47,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick } from 'vue'
+import { ref } from 'vue'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 
@@ -70,13 +69,6 @@ function handleSubmit() {
 
   emit('submit', content)
   input.value = ''
-
-  // Reset textarea height
-  nextTick(() => {
-    if (textareaRef.value) {
-      textareaRef.value.style.height = 'auto'
-    }
-  })
 }
 
 function handleKeyDown(event: KeyboardEvent) {
@@ -84,16 +76,5 @@ function handleKeyDown(event: KeyboardEvent) {
     event.preventDefault()
     handleSubmit()
   }
-}
-
-function adjustHeight() {
-  if (!textareaRef.value) return
-
-  // Reset height to auto to get correct scrollHeight
-  textareaRef.value.style.height = 'auto'
-
-  // Set height to scrollHeight, max 200px
-  const newHeight = Math.min(textareaRef.value.scrollHeight, 200)
-  textareaRef.value.style.height = `${newHeight}px`
 }
 </script>

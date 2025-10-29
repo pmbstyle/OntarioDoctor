@@ -1,5 +1,3 @@
-"""Embedding service using sentence-transformers"""
-
 import logging
 from typing import List
 import torch

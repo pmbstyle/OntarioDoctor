@@ -1,5 +1,3 @@
-"""Hybrid retrieval service (Vector + BM25)"""
-
 import logging
 from typing import List, Dict, Any
 from rank_bm25 import BM25Okapi

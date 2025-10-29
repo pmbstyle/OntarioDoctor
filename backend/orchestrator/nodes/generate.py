@@ -1,5 +1,3 @@
-"""Generate node - Call Ollama (MedGemma-4B) for answer generation"""
-
 import logging
 import httpx
 from typing import Dict, Any

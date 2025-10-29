@@ -1,5 +1,3 @@
-"""Qdrant client wrapper"""
-
 import logging
 from typing import List, Dict, Any
 from qdrant_client import QdrantClient
@@ -16,9 +14,7 @@ from qdrant_client.http.exceptions import UnexpectedResponse
 from backend.shared.constants import (
     QDRANT_COLLECTION_NAME,
     QDRANT_DISTANCE,
-    EMBEDDING_DIM,
-    TENANT,
-    LANGUAGE
+    EMBEDDING_DIM
 )
 
 

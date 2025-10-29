@@ -80,7 +80,6 @@ export const useChatStore = defineStore('chat', () => {
   }
 
   return {
-    // State
     messages,
     citations,
     currentTriage,
@@ -88,11 +87,9 @@ export const useChatStore = defineStore('chat', () => {
     loading,
     error,
     latency,
-    // Computed
     hasMessages,
     isEmergency,
     lastMessage,
-    // Actions
     sendMessage,
     clearHistory,
     removeLastMessage,

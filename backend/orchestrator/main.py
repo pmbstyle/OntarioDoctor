@@ -1,5 +1,3 @@
-"""Orchestrator Service - LangGraph workflow execution"""
-
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -25,7 +23,7 @@ app.add_middleware(
 )
 
 
-@app.on_event("startup")
+@app.lifespan("startup")
 async def startup_event():
     """Startup event"""
     logger.info("Starting orchestrator service...")

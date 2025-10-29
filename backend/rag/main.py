@@ -1,5 +1,3 @@
-"""RAG Service - Hybrid retrieval with Qdrant + BM25"""
-
 import time
 import uuid
 from fastapi import FastAPI, HTTPException
