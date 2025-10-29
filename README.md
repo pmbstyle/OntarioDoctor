@@ -1,6 +1,10 @@
-# OntarioDoctor
+# OntarioDoctor (PoC)
 
-A medical symptom-checker chat application for Ontario residents, powered by RAG (Retrieval-Augmented Generation) with MedGemma-4b-it LLM.
+A PoC of a medical symptom-checker chat application for Ontario residents, powered by RAG (Retrieval-Augmented Generation) with MedGemma-4b-it LLM.
+
+<p align="center">
+<img src="https://github.com/user-attachments/assets/cf137d01-f53e-4090-8e2b-60763c62f075" />
+</p>
 
 ## 🎯 Features
 
@@ -52,7 +56,7 @@ A medical symptom-checker chat application for Ontario residents, powered by RAG
 ### 1. Clone Repository
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/pmbstyle/OntarioDoctor.git
 cd OntarioDoctor
 ```
 
