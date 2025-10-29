@@ -22,7 +22,7 @@ class Citation(BaseModel):
 
 class ChatRequest(BaseModel):
     """Request to /chat endpoint"""
-    messages: List[Message]
+    messages: List[Message] = Field(..., min_length=1, max_length=50)
 
 
 class ChatResponse(BaseModel):

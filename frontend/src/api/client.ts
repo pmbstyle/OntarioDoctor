@@ -14,30 +14,59 @@ class ApiClient {
   }
 
   async sendMessage(messages: ChatRequest['messages']): Promise<ChatResponse> {
-    const response = await fetch(`${this.baseUrl}/chat`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ messages }),
-    })
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 120000) // 120s timeout
 
-    if (!response.ok) {
-      const error = await response.text()
-      throw new Error(`API error: ${response.status} - ${error}`)
+    try {
+      const response = await fetch(`${this.baseUrl}/chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ messages }),
+        signal: controller.signal,
+      })
+
+      clearTimeout(timeoutId)
+
+      if (!response.ok) {
+        const error = await response.text()
+        throw new Error(`API error: ${response.status} - ${error}`)
+      }
+
+      return response.json()
+    } catch (error) {
+      clearTimeout(timeoutId)
+      if (error instanceof Error && error.name === 'AbortError') {
+        throw new Error('Request timeout: The server took too long to respond')
+      }
+      throw error
     }
-
-    return response.json()
   }
 
   async healthCheck(): Promise<{ status: string }> {
-    const response = await fetch(`${this.baseUrl}/health`)
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 5000) // 5s timeout for health check
 
-    if (!response.ok) {
-      throw new Error(`Health check failed: ${response.status}`)
+    try {
+      const response = await fetch(`${this.baseUrl}/health`, {
+        signal: controller.signal,
+      })
+
+      clearTimeout(timeoutId)
+
+      if (!response.ok) {
+        throw new Error(`Health check failed: ${response.status}`)
+      }
+
+      return response.json()
+    } catch (error) {
+      clearTimeout(timeoutId)
+      if (error instanceof Error && error.name === 'AbortError') {
+        throw new Error('Health check timeout')
+      }
+      throw error
     }
-
-    return response.json()
   }
 }
 
