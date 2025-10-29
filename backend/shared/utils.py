@@ -2,6 +2,7 @@ import time
 import logging
 from typing import Any, Callable
 from functools import wraps
+import asyncio
 
 
 def setup_logging(service_name: str, level: int = logging.INFO):
@@ -46,6 +47,3 @@ def extract_numbers(text: str) -> list[float]:
     """Extract numbers from text"""
     import re
     return [float(n) for n in re.findall(r'\d+\.?\d*', text)]
-
-
-import asyncio

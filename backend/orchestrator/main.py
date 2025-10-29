@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -10,8 +11,26 @@ from backend.orchestrator.graph import run_graph
 # Setup logging
 logger = setup_logging("orchestrator", level=getattr(__import__('logging'), settings.log_level))
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Lifespan context manager for startup and shutdown events"""
+    # Startup
+    logger.info("Starting orchestrator service...")
+    logger.info(f"RAG URL: {settings.rag_url}")
+    logger.info(f"Ollama URL: {settings.ollama_url}")
+    logger.info("Orchestrator service started successfully")
+    yield
+    # Shutdown (if needed in the future)
+    logger.info("Shutting down orchestrator service...")
+
+
 # Initialize FastAPI app
-app = FastAPI(title="Orchestrator Service", version="1.0.0")
+app = FastAPI(
+    title="Orchestrator Service",
+    version="1.0.0",
+    lifespan=lifespan
+)
 
 # CORS
 app.add_middleware(
@@ -21,15 +40,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-@app.lifespan("startup")
-async def startup_event():
-    """Startup event"""
-    logger.info("Starting orchestrator service...")
-    logger.info(f"RAG URL: {settings.rag_url}")
-    logger.info(f"Ollama URL: {settings.ollama_url}")
-    logger.info("Orchestrator service started successfully")
 
 
 @app.get("/health")
@@ -73,11 +83,12 @@ async def run_orchestrator(request: ChatRequest):
         )
 
         # Build response
+        red_flag_check = final_state.get("red_flag_check")
         response = ChatResponse(
             answer=final_state.get("answer", ""),
             citations=final_state.get("citations", []),
             triage=final_state.get("triage", "primary-care"),
-            red_flags=final_state.get("red_flag_check", {}).red_flags if final_state.get("red_flag_check") else []
+            red_flags=red_flag_check.red_flags if red_flag_check else []
         )
 
         logger.info(f"Orchestrator completed: triage={response.triage}, citations={len(response.citations)}")

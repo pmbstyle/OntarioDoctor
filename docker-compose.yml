@@ -89,10 +89,10 @@ services:
     ports:
       - "8080:8000"
     environment:
-      - GATEWAY_ORCHESTRATOR_URL=http://orchestrator:8002
-      - GATEWAY_RAG_URL=http://rag:8001
-      - GATEWAY_CORS_ORIGINS=["http://localhost:5173","http://localhost:3000"]
-      - GATEWAY_LOG_LEVEL=INFO
+      GATEWAY_ORCHESTRATOR_URL: http://orchestrator:8002
+      GATEWAY_RAG_URL: http://rag:8001
+      GATEWAY_CORS_ORIGINS: '["http://localhost:5173","http://localhost:3000"]'
+      GATEWAY_LOG_LEVEL: INFO
     depends_on:
       - orchestrator
     networks:

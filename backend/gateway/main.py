@@ -1,4 +1,5 @@
 import time
+from contextlib import asynccontextmanager
 import httpx
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -18,11 +19,27 @@ from backend.gateway.config import settings
 # Setup logging
 logger = setup_logging("gateway", level=getattr(__import__('logging'), settings.log_level))
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Lifespan context manager for startup and shutdown events"""
+    # Startup
+    logger.info("Starting API Gateway...")
+    logger.info(f"Orchestrator URL: {settings.orchestrator_url}")
+    logger.info(f"RAG URL: {settings.rag_url}")
+    logger.info(f"CORS origins: {settings.cors_origins}")
+    logger.info("API Gateway started successfully")
+    yield
+    # Shutdown (if needed in the future)
+    logger.info("Shutting down API Gateway...")
+
+
 # Initialize FastAPI app
 app = FastAPI(
     title="OntarioDoctor API Gateway",
     version="1.0.0",
-    description="Canadian medical symptom-checker for Ontario residents"
+    description="Canadian medical symptom-checker for Ontario residents",
+    lifespan=lifespan
 )
 
 # CORS
@@ -33,16 +50,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-@app.on_event("startup")
-async def startup_event():
-    """Startup event"""
-    logger.info("Starting API Gateway...")
-    logger.info(f"Orchestrator URL: {settings.orchestrator_url}")
-    logger.info(f"RAG URL: {settings.rag_url}")
-    logger.info(f"CORS origins: {settings.cors_origins}")
-    logger.info("API Gateway started successfully")
 
 
 @app.get("/")
