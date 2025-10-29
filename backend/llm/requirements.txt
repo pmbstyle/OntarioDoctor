@@ -1,5 +1,0 @@
-# vLLM Server
-vllm==0.6.3.post1
-
-# PyTorch (install separately with CUDA support via setup_venv.sh)
-# torch==2.5.1

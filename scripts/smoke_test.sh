@@ -52,10 +52,10 @@ else
     fail "Orchestrator is unhealthy"
 fi
 
-if curl -s -f http://localhost:8000/health > /dev/null; then
-    pass "vLLM is healthy"
+if curl -s -f http://localhost:11435/api/tags > /dev/null; then
+    pass "Ollama is healthy"
 else
-    fail "vLLM is unhealthy"
+    fail "Ollama is unhealthy"
 fi
 
 if curl -s -f http://localhost:6333/health > /dev/null; then

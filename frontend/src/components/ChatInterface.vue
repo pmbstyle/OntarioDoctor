@@ -20,7 +20,7 @@
   </Card>
 
   <Card
-    class="flex flex-1 w-full max-w-6xl flex-col p-0"
+    class="flex flex-1 w-full max-w-6xl flex-col p-0 overflow-hidden"
     :class="{'flex-col items-center justify-center': !chatStore.hasMessages}"
   >
     <Card v-if="!chatStore.hasMessages" class="text-center">

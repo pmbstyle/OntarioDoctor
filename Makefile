@@ -16,7 +16,7 @@ up: ## Start all services
 	@echo "   API Gateway:  http://localhost:8080"
 	@echo "   RAG Service:  http://localhost:8001"
 	@echo "   Orchestrator: http://localhost:8002"
-	@echo "   vLLM:         http://localhost:8000"
+	@echo "   Ollama:       http://localhost:11435"
 	@echo "   Qdrant:       http://localhost:6333"
 
 down: ## Stop all services
@@ -82,8 +82,8 @@ health: ## Check health of all services
 	@echo "Orchestrator:"
 	@curl -s http://localhost:8002/health | python3 -m json.tool || echo "❌ Orchestrator unhealthy"
 	@echo ""
-	@echo "vLLM:"
-	@curl -s http://localhost:8000/health | python3 -m json.tool || echo "❌ vLLM unhealthy"
+	@echo "Ollama:"
+	@curl -s http://localhost:11435/api/tags | python3 -m json.tool || echo "❌ Ollama unhealthy"
 	@echo ""
 	@echo "Qdrant:"
 	@curl -s http://localhost:6333/health | python3 -m json.tool || echo "❌ Qdrant unhealthy"

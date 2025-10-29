@@ -20,7 +20,7 @@ transformers==4.46.3
 torch==2.5.1
 accelerate==1.1.1
 
-# OpenAI client (for vLLM)
+# OpenAI client (optional, Ollama uses its own API)
 openai==1.54.4
 
 # HTTP & Async

@@ -12,17 +12,17 @@ Backend services for the OntarioDoctor medical symptom-checker application.
 ### Orchestrator (Port 8002)
 - **Purpose**: LangGraph workflow coordination
 - **Features**: Red-flag detection, symptom NLU, context assembly
-- **Dependencies**: RAG, vLLM
+- **Dependencies**: RAG, Ollama
 
 ### RAG (Port 8001)
 - **Purpose**: Hybrid retrieval service
 - **Features**: Vector search (Qdrant), BM25, cross-encoder reranking
 - **Dependencies**: Qdrant
 
-### vLLM (Port 8000)
+### Ollama (Port 11434)
 - **Purpose**: LLM inference server
-- **Model**: google/medgemma-4b-it
-- **API**: OpenAI-compatible
+- **Model**: amsaravi/medgemma-4b-it:q6 (Q6 quantized)
+- **API**: Ollama chat API
 
 ## Setup
 
@@ -59,7 +59,6 @@ backend/
 ├── orchestrator/      # LangGraph workflow
 │   └── nodes/         # Graph nodes
 ├── rag/              # Retrieval service
-├── llm/              # vLLM configuration
 ├── shared/           # Shared models and utilities
 │   ├── models.py     # Pydantic models
 │   ├── constants.py  # Constants (Ontario-specific)

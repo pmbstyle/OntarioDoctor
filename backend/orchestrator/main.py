@@ -30,7 +30,7 @@ async def startup_event():
     """Startup event"""
     logger.info("Starting orchestrator service...")
     logger.info(f"RAG URL: {settings.rag_url}")
-    logger.info(f"vLLM URL: {settings.vllm_url}")
+    logger.info(f"Ollama URL: {settings.ollama_url}")
     logger.info("Orchestrator service started successfully")
 
 
@@ -41,7 +41,7 @@ async def health():
         "status": "healthy",
         "service": "orchestrator",
         "rag_url": settings.rag_url,
-        "vllm_url": settings.vllm_url
+        "ollama_url": settings.ollama_url
     }
 
 
@@ -55,7 +55,7 @@ async def run_orchestrator(request: ChatRequest):
     2. Check red flags
     3. Retrieve documents (if not ER)
     4. Assemble context with citations
-    5. Generate answer with vLLM
+    5. Generate answer with Ollama
     6. Log trace
 
     Args:
@@ -71,7 +71,7 @@ async def run_orchestrator(request: ChatRequest):
         final_state = await run_graph(
             messages=request.messages,
             rag_url=settings.rag_url,
-            vllm_url=settings.vllm_url
+            ollama_url=settings.ollama_url
         )
 
         # Build response

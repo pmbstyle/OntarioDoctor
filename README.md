@@ -36,8 +36,8 @@ A medical symptom-checker chat application for Ontario residents, powered by RAG
        ├──────> RAG Service (Port 8001)
        │        Qdrant + BM25 + Reranker
        │
-       └──────> vLLM (Port 8000)
-                MedGemma-4b-it
+       └──────> Ollama (Port 11434)
+                MedGemma-4B-IT:Q6
 ```
 
 ## 🚀 Quick Start
@@ -45,7 +45,7 @@ A medical symptom-checker chat application for Ontario residents, powered by RAG
 ### Prerequisites
 
 - **Docker** & **Docker Compose**
-- **NVIDIA GPU** with CUDA support (for vLLM)
+- **NVIDIA GPU** with CUDA support (for Ollama)
 - **Python 3.11+** (for local development)
 - **Node 20+** & **pnpm** (for frontend development)
 
@@ -64,7 +64,7 @@ make up
 
 This will start:
 - ✅ Qdrant (vector database)
-- ✅ vLLM (LLM inference)
+- ✅ Ollama (LLM inference)
 - ✅ RAG Service
 - ✅ Orchestrator
 - ✅ API Gateway
@@ -94,7 +94,6 @@ OntarioDoctor/
 │   ├── gateway/          # FastAPI: /chat, /ingest, /health
 │   ├── orchestrator/     # LangGraph workflow
 │   ├── rag/             # Hybrid retrieval service
-│   ├── llm/             # vLLM configuration
 │   └── shared/          # Common models & utilities
 ├── frontend/            # Vue 3 chat interface
 ├── docs/                # Documentation
@@ -126,10 +125,10 @@ OntarioDoctor/
    python -m uvicorn backend.gateway.main:app --reload --port 8000
    ```
 
-3. **Start vLLM:**
+3. **Start Ollama** (if not using Docker):
    ```bash
-   cd backend/llm
-   ./run_vllm.sh
+   docker run -d --gpus=all -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
+   docker exec -it ollama ollama pull amsaravi/medgemma-4b-it:q6
    ```
 
 ### Frontend (Local)
@@ -219,7 +218,7 @@ Automatic triage for serious symptoms:
 - **FastAPI**: Modern async Python web framework
 - **LangGraph**: State machine for RAG workflow
 - **Qdrant**: Vector database
-- **vLLM**: Fast LLM inference (CUDA-accelerated)
+- **Ollama**: Fast LLM inference (CUDA-accelerated)
 - **sentence-transformers**: Embeddings (bge-small-en-v1.5)
 - **rank-bm25**: Keyword search
 - **Pydantic**: Data validation
@@ -233,20 +232,20 @@ Automatic triage for serious symptoms:
 - **Vite**: Build tool
 
 ### ML Models
-- **LLM**: google/medgemma-4b-it (medical fine-tuned)
+- **LLM**: amsaravi/medgemma-4b-it:q6 (medical fine-tuned, Q6 quantized)
 - **Embeddings**: BAAI/bge-small-en-v1.5 (384-dim)
 - **Reranker**: BAAI/bge-reranker-base (cross-encoder)
 
 ## 📊 Service Ports
 
-| Service      | Port | Description |
-|--------------|------|-------------|
-| Frontend     | 5173 | Vue 3 dev server |
-| Gateway      | 8080 | Public API |
-| Orchestrator | 8002 | Internal workflow |
-| RAG          | 8001 | Retrieval service |
-| vLLM         | 8000 | LLM inference |
-| Qdrant       | 6333 | Vector DB |
+| Service      | Port  | Description |
+|--------------|-------|-------------|
+| Frontend     | 5173  | Vue 3 dev server |
+| Gateway      | 8080  | Public API |
+| Orchestrator | 8002  | Internal workflow |
+| RAG          | 8001  | Retrieval service |
+| Ollama       | 11435 | LLM inference (external) |
+| Qdrant       | 6333  | Vector DB |
 
 ## 🔐 Security & Safety
 
@@ -271,10 +270,10 @@ Automatic triage for serious symptoms:
 
 ## 🐛 Troubleshooting
 
-### vLLM won't start
+### Ollama won't start
 - Ensure NVIDIA drivers installed: `nvidia-smi`
 - Check CUDA version compatibility
-- Verify GPU memory (needs ~8GB for MedGemma-4b)
+- Verify GPU memory (needs ~4GB for MedGemma-4B-IT:Q6 quantized)
 
 ### Frontend can't connect to backend
 - Check gateway is running: `curl http://localhost:8080/health`
@@ -309,9 +308,10 @@ For medical advice, contact **Telehealth Ontario** at **1-866-797-0000**.
 ## 🙏 Acknowledgments
 
 - Medical data sources: MedlinePlus, Ontario.ca
-- LLM: Google MedGemma
+- LLM: Google MedGemma (via Ollama quantized version)
 - Embeddings: BAAI BGE models
 - UI Components: shadcn-vue
+- LLM Inference: Ollama
 
 ---
 

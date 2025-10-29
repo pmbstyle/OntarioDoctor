@@ -30,7 +30,7 @@ class GraphState(TypedDict):
     trace_id: str
 
 
-def create_graph(rag_url: str = "http://localhost:8001", vllm_url: str = "http://localhost:8000"):
+def create_graph(rag_url: str = "http://localhost:8001", ollama_url: str = "http://localhost:11434"):
     """
     Create LangGraph state machine
 
@@ -43,7 +43,7 @@ def create_graph(rag_url: str = "http://localhost:8001", vllm_url: str = "http:/
 
     Args:
         rag_url: RAG service URL
-        vllm_url: vLLM service URL
+        ollama_url: Ollama service URL
 
     Returns:
         Compiled graph
@@ -53,7 +53,7 @@ def create_graph(rag_url: str = "http://localhost:8001", vllm_url: str = "http:/
         return await retrieve_documents(state, rag_url)
 
     async def generate_wrapper(state: GraphState) -> GraphState:
-        return await generate_answer(state, vllm_url)
+        return await generate_answer(state, ollama_url)
 
     # Define graph
     workflow = StateGraph(GraphState)
@@ -104,19 +104,19 @@ def create_graph(rag_url: str = "http://localhost:8001", vllm_url: str = "http:/
     return graph
 
 
-async def run_graph(messages: List[Message], rag_url: str, vllm_url: str) -> GraphState:
+async def run_graph(messages: List[Message], rag_url: str, ollama_url: str) -> GraphState:
     """
     Run the graph with messages
 
     Args:
         messages: List of chat messages
         rag_url: RAG service URL
-        vllm_url: vLLM service URL
+        ollama_url: Ollama service URL
 
     Returns:
         Final state
     """
-    graph = create_graph(rag_url, vllm_url)
+    graph = create_graph(rag_url, ollama_url)
 
     # Initialize state
     initial_state = GraphState(

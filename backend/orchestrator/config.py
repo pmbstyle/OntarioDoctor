@@ -12,7 +12,7 @@ class Settings(BaseSettings):
 
     # Dependencies
     rag_url: str = "http://localhost:8001"
-    vllm_url: str = "http://localhost:8000"  # vLLM service (port 8000 internal)
+    ollama_url: str = "http://localhost:11434"  # Ollama service
 
     # Logging
     log_level: str = "INFO"

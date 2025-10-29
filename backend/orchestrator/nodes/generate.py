@@ -1,4 +1,4 @@
-"""Generate node - Call vLLM (Text Generation Inference) for answer generation"""
+"""Generate node - Call Ollama (MedGemma-4B) for answer generation"""
 
 import logging
 import httpx
@@ -11,13 +11,13 @@ from backend.shared.constants import LLM_TEMPERATURE, LLM_MAX_TOKENS
 logger = logging.getLogger(__name__)
 
 
-async def generate_answer(state: Dict[str, Any], vllm_url: str = "http://localhost:80") -> Dict[str, Any]:
+async def generate_answer(state: Dict[str, Any], ollama_url: str = "http://localhost:11434") -> Dict[str, Any]:
     """
-    Generate answer using vLLM (Text Generation Inference)
+    Generate answer using Ollama (MedGemma-4B instruction-tuned model)
 
     Args:
         state: LangGraph state with context_text, features, messages
-        vllm_url: vLLM service URL
+        ollama_url: Ollama service URL
 
     Returns:
         Updated state with answer
@@ -35,7 +35,7 @@ async def generate_answer(state: Dict[str, Any], vllm_url: str = "http://localho
         state["answer"] = er_response
         return state
 
-    # Standard path: call vLLM
+    # Standard path: call Ollama
     context_text = state.get("context_text", "")
     features = state.get("features")
     messages = state.get("messages", [])
@@ -63,35 +63,36 @@ async def generate_answer(state: Dict[str, Any], vllm_url: str = "http://localho
 
     user_prompt = build_user_prompt(context_text, patient_features_dict, user_question)
 
-    # Format prompt manually (Meditron-7B is a base model without chat template)
-    full_prompt = f"{SYSTEM_PROMPT}\n\n{user_prompt}\n\nAnswer:"
+    logger.info("Calling Ollama (MedGemma-4B-IT) for answer generation...")
 
-    logger.info("Calling vLLM for answer generation...")
-
-    # Call vLLM (OpenAI-compatible API) using completions endpoint
+    # Call Ollama chat API (MedGemma-4B is instruction-tuned, supports chat format)
     try:
         async with httpx.AsyncClient(timeout=60.0) as client:
             response = await client.post(
-                f"{vllm_url}/v1/completions",
+                f"{ollama_url}/api/chat",
                 json={
-                    "model": "epfl-llm/meditron-7b",
-                    "prompt": full_prompt,
-                    "temperature": LLM_TEMPERATURE,
-                    "max_tokens": LLM_MAX_TOKENS,
-                    "stop": ["\n\n", "Question:", "User:"],
-                    "stream": False
+                    "model": "amsaravi/medgemma-4b-it:q6",
+                    "messages": [
+                        {"role": "system", "content": SYSTEM_PROMPT},
+                        {"role": "user", "content": user_prompt}
+                    ],
+                    "stream": False,
+                    "options": {
+                        "temperature": LLM_TEMPERATURE,
+                        "num_predict": LLM_MAX_TOKENS
+                    }
                 }
             )
             response.raise_for_status()
 
             result = response.json()
-            answer = result["choices"][0]["text"].strip()
+            answer = result["message"]["content"].strip()
 
             logger.info(f"Generated answer ({len(answer)} chars)")
             state["answer"] = answer
 
     except Exception as e:
-        logger.error(f"vLLM generation failed: {e}", exc_info=True)
+        logger.error(f"Ollama generation failed: {e}", exc_info=True)
         state["answer"] = (
             "I apologize, but I'm having trouble generating a response right now. "
             "Please call Telehealth Ontario at 1-866-797-0000 for medical advice."

@@ -17,24 +17,16 @@ services:
       retries: 5
       start_period: 10s
 
-  # vLLM Service (GPU-accelerated with Meditron-7B)
-  vllm:
-    build:
-      context: .
-      dockerfile: backend/llm/Dockerfile
-    container_name: OntarioDoctor-vllm
+  # Ollama LLM Service (GPU-accelerated with MedGemma-4B)
+  ollama:
+    image: ollama/ollama:latest
+    container_name: OntarioDoctor-ollama
     ports:
-      - "${VLLM_PORT:-8000}:8000"
+      - "11435:11434"
     volumes:
-      - ~/.cache/huggingface:/root/.cache/huggingface
+      - ollama_data:/root/.ollama
     environment:
-      - HF_TOKEN=${HF_TOKEN}
-      - CUDA_VISIBLE_DEVICES=0
-      - VLLM_MODEL=${VLLM_MODEL:-epfl-llm/meditron-7b}
-      - VLLM_PORT=${VLLM_PORT:-8000}
-      - VLLM_HOST=0.0.0.0
-      - VLLM_GPU_MEMORY_UTILIZATION=${VLLM_GPU_MEMORY_UTILIZATION:-0.95}
-      - VLLM_MAX_MODEL_LEN=${VLLM_MAX_MODEL_LEN:-2048}
+      - OLLAMA_HOST=0.0.0.0:11434
     networks:
       - OntarioDoctor-network
     deploy:
@@ -45,11 +37,11 @@ services:
               count: 1
               capabilities: [gpu]
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 180s
+      start_period: 60s
     restart: on-failure
 
   # RAG Service
@@ -79,11 +71,11 @@ services:
       - "8002:8002"
     environment:
       - ORCHESTRATOR_RAG_URL=${ORCHESTRATOR_RAG_URL:-http://rag:8001}
-      - ORCHESTRATOR_VLLM_URL=${ORCHESTRATOR_LLM_URL:-http://vllm:8000}
+      - ORCHESTRATOR_OLLAMA_URL=${ORCHESTRATOR_LLM_URL:-http://ollama:11434}
       - ORCHESTRATOR_LOG_LEVEL=${ORCHESTRATOR_LOG_LEVEL:-INFO}
     depends_on:
       - rag
-      - vllm
+      - ollama
     networks:
       - OntarioDoctor-network
     restart: on-failure
@@ -128,3 +120,4 @@ networks:
 
 volumes:
   qdrant_data:
+  ollama_data:
